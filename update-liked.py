@@ -1,14 +1,19 @@
 import requests
 
-headin = {'Authorization': 'Bearer BQD-UjLjxZ-y4yC3GeP2SWELCWsQ15LdG_D5HCjXdfY_QAtybX9fQgSE3y66uU0i7kCjeiYJ9PVaU4V_WjMHOURcUHbqgoNavT29J0YJsCJ3TjfVrxog2UN5Rd4lJiKIfv0o7yHRyQjjikyx8JszU_mNy_TBTrisuzb4NMQ8QNkofurDOUXqVqvUM8ZgG2_StcDoVnYHZng_'}
+token = 'BQCuIF4u-B2khNnAEqsf4zRqdITZ0zCblzDBNpgESr8kK-wUG6WdBkbmUsdJ0vZzvxoBZI_4NxnoEp3ychVFgMMqyMtc4l7_KbHr4xJyYshBczxx2ynzIr3FyxZywKc6-8Ij5dKoaPnGDrVcKBRTasivlg2maAhSwcM4uvh6Ox3T7yw8xqXofl35a3CyoYaH-gDQpJSArLoR'
+headin = {'Authorization': 'Bearer '+token}
 
-liked_songs = open('Daily-Mix/liked-songs', 'a')
+# liked_songs = open('Daily-Mix/liked-songs', 'a')
+liked_songs = open('Daily-Mix/liked-songs', 'a+')
 
-d = requests.get('https://api.spotify.com/v1/me/tracks?limit=20&offset=0', headers=headin)
+d = requests.get('https://api.spotify.com/v1/me/tracks?limit=5&offset=0', headers=headin)
 print(d.status_code, d.reason)
     
 
 for i in d.json()['items']:
-    liked_songs.write('\n' + i['track']['name'] + ' - ' + i['track']['artists'][0]['name'])
-    
+    entry = i['track']['name'] + ' - ' + i['track']['artists'][0]['name']
+    if(entry in liked_songs.read()):
+        break
+    liked_songs.write('\n' + entry)
+
 liked_songs.close()
