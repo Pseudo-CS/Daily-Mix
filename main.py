@@ -37,6 +37,7 @@ def filter(mix, list):
     fmix = []
     for s in mix:
         if(s['track']['name'] in list):
+            print('in here')
             continue
         else:
             fmix.append(s)
@@ -49,8 +50,8 @@ def filter(mix, list):
 dg = pull_mix(daily[0])
 last = filter(dg, liked_songs)
 
-for l in last:
-    print(l['track']['name'])
+# for l in last:
+#     print(l['track']['name'])
 
 
 
