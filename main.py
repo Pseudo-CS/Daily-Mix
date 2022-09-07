@@ -36,7 +36,8 @@ def pull_mix(mix_link):
 def filter(mix, list):
     fmix = []
     for s in mix:
-        if(s in list):
+        print(s['track']['name'])
+        if(s['track']['name'] in list):
             continue
         else:
             fmix.append(s)
@@ -46,7 +47,8 @@ def filter(mix, list):
 
 
 #for id in daily:
-print(pull_mix(daily[0]))
+dg = pull_mix(daily[0])
+filter(dg, liked_songs)
 
 
 
