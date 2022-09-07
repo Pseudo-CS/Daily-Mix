@@ -1,14 +1,33 @@
+import base64
 import requests
 
-daily = ['spotify:playlist:37i9dQZF1E36fSwXIhiYTS','spotify:playlist:37i9dQZF1E35kMPHR2eNVl','spotify:playlist:37i9dQZF1E39vkG45qETcn','spotify:playlist:37i9dQZF1E35ZIs08CeQyQ','spotify:playlist:37i9dQZF1E34RelE7aOor2','spotify:playlist:37i9dQZF1E34YhwlCe9Hd0'];
-headers = {}
+client_id = 'eda12a570bbc45acb1838434b482f684'
+client_secret = '0cb0b76eb9594ebcac2f507f01b139d9'
+final = client_id + ':' + client_secret
+final = str(base64.b64encode(bytes(final, 'utf-8'))).strip('b\'').strip('\'')
+
+
+headers = {'Authorization': 'Basic ' + final, 
+            'Content-Type': 'application/x-www-form-urlencoded'}
+data = {'grant_type': 'client_credentials'}
+
+
+daily = ['37i9dQZF1E36fSwXIhiYTS','spotify:playlist:37i9dQZF1E35kMPHR2eNVl','spotify:playlist:37i9dQZF1E39vkG45qETcn','spotify:playlist:37i9dQZF1E35ZIs08CeQyQ','spotify:playlist:37i9dQZF1E34RelE7aOor2','spotify:playlist:37i9dQZF1E34YhwlCe9Hd0'];
 liked_songs = open('Daily-Mix/liked-songs', 'r')
 disliked_songs = open('Daily-Mix/disliked-songs', 'r')
 final_list = []
 playlits = []
 
+
 def pull_mix(mix_link):
-    pull = requests.get('https://api.spotify.com/v1/playlists/${a}/tracks'.format(mix_link), headers=headers)
+    try:
+        r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
+    except:
+        print(r.status_code, r.reason)
+
+    headin = {'Authorization': 'Bearer ' + r.json().get('access_token')}
+
+    pull = requests.get('https://api.spotify.com/v1/playlists/{m}/tracks'.format(m=mix_link), headers=headin)
     print(pull.status_code, pull.reason)
     mix = pull.json()['items']
     return mix
