@@ -20,12 +20,12 @@ playlits = []
 
 
 def pull_mix(mix_link):
-    try:
-        r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
-    except:
-        print(r.status_code, r.reason)
+    # try:
+    #     r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
+    # except:
+    #     print(r.status_code, r.reason)
 
-    headin = {'Authorization': 'Bearer ' + r.json().get('access_token')}
+    headin = {'Authorization': 'Bearer ' + 'BQBZbQmY4JPqe9BMsasCo04ED3pWAOBMVk92vrrRhloMpBbVlXN-ZzXuDZY9p4BZ7eqFNbugUuJhGqfzYsH1xsVXIeZOtoJ31TEloJQ2RDonyjNlVhwTPmgo19qV88Fd3pvzSqG5oeJQWpuHp3oQyByi092Ooi-pjdoxNY7yaPHvS4pn_AMns6oXHRqT4q7biS5GGIAWqSJ8'}#r.json().get('access_token')}
 
     pull = requests.get('https://api.spotify.com/v1/playlists/{m}/tracks'.format(m=mix_link), headers=headin)
     print(pull.status_code, pull.reason)
@@ -35,9 +35,9 @@ def pull_mix(mix_link):
 
 def filter(mix, list):
     fmix = []
+    file = list.read()
     for s in mix:
-        if(s['track']['name'] in list):
-            print('in here')
+        if(s['track']['name'] in file):
             continue
         else:
             fmix.append(s)
@@ -49,9 +49,11 @@ def filter(mix, list):
 #for id in daily:
 dg = pull_mix(daily[0])
 last = filter(dg, liked_songs)
-
+print(len(last))
 # for l in last:
 #     print(l['track']['name'])
+
+#filter works fine, now append to playlist
 
 
 
