@@ -16,16 +16,16 @@ daily = ['37i9dQZF1E36fSwXIhiYTS','spotify:playlist:37i9dQZF1E35kMPHR2eNVl','spo
 liked_songs = open('Daily-Mix/liked-songs', 'r')
 disliked_songs = open('Daily-Mix/disliked-songs', 'r')
 final_list = []
-playlits = []
+playlist = ['2VqgmD4YcRG9wrgSD4xuMs']
 
 
 def pull_mix(mix_link):
-    # try:
-    #     r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
-    # except:
-    #     print(r.status_code, r.reason)
+    try:
+        r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
+    except:
+        print(r.status_code, r.reason)
 
-    headin = {'Authorization': 'Bearer ' + 'BQBZbQmY4JPqe9BMsasCo04ED3pWAOBMVk92vrrRhloMpBbVlXN-ZzXuDZY9p4BZ7eqFNbugUuJhGqfzYsH1xsVXIeZOtoJ31TEloJQ2RDonyjNlVhwTPmgo19qV88Fd3pvzSqG5oeJQWpuHp3oQyByi092Ooi-pjdoxNY7yaPHvS4pn_AMns6oXHRqT4q7biS5GGIAWqSJ8'}#r.json().get('access_token')}
+    headin = {'Authorization': 'Bearer ' + r.json().get('access_token')}
 
     pull = requests.get('https://api.spotify.com/v1/playlists/{m}/tracks'.format(m=mix_link), headers=headin)
     print(pull.status_code, pull.reason)
@@ -45,15 +45,29 @@ def filter(mix, list):
     return fmix
 
 
+def update(mix, flist):
 
-#for id in daily:
+    try:
+        r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
+    except:
+        print(r.status_code, r.reason)
+
+    headin = {'Authorization': 'Bearer ' + r.json().get('access_token')}
+
+    for ur in flist:
+        try:
+            pull = requests.post('https://api.spotify.com/v1/playlists/{mix}/tracks?uris={uri}'.format(mix=mix, uri=ur['track']['uri']), headers=headin)
+        except:
+            print(pull.status_code, pull.reason)
+
+
+
 dg = pull_mix(daily[0])
 last = filter(dg, liked_songs)
-print(len(last))
-# for l in last:
-#     print(l['track']['name'])
+update(playlist[0], last)
 
-#filter works fine, now append to playlist
+
+#testing the update function
 
 
 
