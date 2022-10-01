@@ -1,3 +1,5 @@
+#https://accounts.spotify.com/authorize?client_id=eda12a570bbc45acb1838434b482f684&response_type=code&redirect_uri=http://localhost:8000&scope=playlist-modify-public+playlist-modify-private 
+
 import base64
 import requests
 
