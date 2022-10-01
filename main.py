@@ -9,7 +9,9 @@ final = str(base64.b64encode(bytes(final, 'utf-8'))).strip('b\'').strip('\'')
 
 headers = {'Authorization': 'Basic ' + final, 
             'Content-Type': 'application/x-www-form-urlencoded'}
-data = {'grant_type': 'client_credentials'}
+data = {'grant_type': 'authorization_code',
+        'code': 'AQC3aBuMIyMk9_LPxTf5EWLS-3N5NTwg3vk5sFnk_V9x3dP7T3shoBGL1i00jkLOLz2K0YwRy_YozqlK5-FHCVu0XvV3kirB19VKxnhtiP1XtyoSZxoTBWj0f6UG20EZC1TPS4kZRgyr4bKwhuNZ3WeT1ZhCp-V9vn2nbsZw6XGDhJb_YkpunO2D-7Ave9bkDdCnLrFIqN0rHA1CJzpZagKPbt8ZRGNAqng',
+        'redirect_uri': 'http://localhost:8000'}
 
 
 daily = ['37i9dQZF1E36fSwXIhiYTS','spotify:playlist:37i9dQZF1E35kMPHR2eNVl','spotify:playlist:37i9dQZF1E39vkG45qETcn','spotify:playlist:37i9dQZF1E35ZIs08CeQyQ','spotify:playlist:37i9dQZF1E34RelE7aOor2','spotify:playlist:37i9dQZF1E34YhwlCe9Hd0'];
@@ -19,13 +21,21 @@ final_list = []
 playlist = ['2VqgmD4YcRG9wrgSD4xuMs']
 
 
-def pull_mix(mix_link):
-    try:
-        r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
-    except:
-        print(r.status_code, r.reason)
 
-    headin = {'Authorization': 'Bearer ' + r.json().get('access_token')}
+def access_token():
+    r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
+    print(r.status_code, r.reason)
+    if(r.status_code==200): return r
+    
+
+acc = access_token().json().get('access_token')
+headin = {'Authorization': 'Bearer ' + acc}
+
+#BQAUx-db-wYLr-HQlJPN0yxtXElo6v8VVp8UAyRmRRjJC4isL3UxUDHTGEgIG9eKs3KT4h08vLj7w9V8xifxZYnh2CgWexZycJ2kxtSJJiitQdx21VgileK7gLkojdwjyCsiPnFnviyn_C0js6MOmU7LwZW6B4DNujUqZRLE0-JmYndIprOahDBoDAyh6xh_wCIkzH-McCgtH--gscarfizmxR4T5rhKvdWZpLrgnQeV6OyFzRmTK48DyLQcPzc
+#AQBmH68mYqJdsuAleUpn93FeyqH6nKcdgJpmVzwtnLH7SnfKq0_WIFoDafvZVVfM-mpuXTjTkjkT8QDsRA9PHXSYWYHyxaCqs2jxPoR5gIsWq6b4cVAUVHGk7erQ0kD1-lQ
+
+
+def pull_mix(mix_link):
 
     pull = requests.get('https://api.spotify.com/v1/playlists/{m}/tracks'.format(m=mix_link), headers=headin)
     print(pull.status_code, pull.reason)
@@ -46,13 +56,6 @@ def filter(mix, list):
 
 
 def update(mix, flist):
-
-    try:
-        r = requests.post('https://accounts.spotify.com/api/token', headers=headers, data=data)
-    except:
-        print(r.status_code, r.reason)
-
-    headin = {'Authorization': 'Bearer ' + r.json().get('access_token')}
 
     for ur in flist:
         try:
